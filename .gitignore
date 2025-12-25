@@ -1,0 +1,35 @@
+# --- GÜVENLİK (Çok Önemli) ---
+.env
+.venv
+venv/
+
+# --- PYTHON ---
+__pycache__/
+*.py[cod]
+*.so
+
+# --- VERİ SETLERİ (Data) ---
+# Scriptlerin indirdiği veya oluşturduğu klasörler
+data/dataset_local/
+data/raw/
+data/processed/
+data/downloaded_dataset/
+*.zip
+*.tar.gz
+
+# --- EĞİTİM ÇIKTILARI (Models) ---
+# YOLO eğitim logları ve ağırlıkları
+runs/
+*.pt
+*.onnx
+models/weights/*
+
+# --- IDE & SİSTEM ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# --- JUPYTER ---
+.ipynb_checkpoints/
