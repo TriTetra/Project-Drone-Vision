@@ -17,6 +17,10 @@ data/downloaded_dataset/
 *.zip
 *.tar.gz
 
+# this is me
+# --- VİDEOLAR ---
+experiments\videos\output_webcam.avi 
+
 # --- EĞİTİM ÇIKTILARI (Models) ---
 # YOLO eğitim logları ve ağırlıkları
 runs/

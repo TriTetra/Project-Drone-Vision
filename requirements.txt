@@ -1,31 +1,31 @@
 # --- Core Computer Vision & AI ---
-ultralytics>=8.0.0      # YOLOv8 Training & Inference
-opencv-python>=4.8.0    # OpenCV (Görüntü İşleme ve Kamera)
-torch>=2.0.0            # Deep Learning Backend (PyTorch)
-torchvision             # PyTorch Görüntü Araçları
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+torch>=2.0.0
+torchvision
 
 # --- Data Processing & Utilities ---
-numpy                   # Matris ve Array işlemleri (OpenCV'nin temeli)
-pandas                  # Veri analizi (Gerekirse logları okumak için)
-Pillow                  # Görüntü okuma/yazma (PIL)
-PyYAML                  # .yaml dosyalarını (data.yaml) okumak için
-tqdm                    # Scriptlerimizde kullandığımız Progress Bar
-matplotlib              # Grafik ve analiz çizimleri için
-seaborn                 # Daha gelişmiş grafikler (Confusion Matrix vb.)
+numpy
+pandas
+Pillow
+PyYAML
+tqdm
+matplotlib
+seaborn
 
 # --- Synthetic Data Generation (Generative AI) ---
-diffusers>=0.20.0               # HuggingFace Diffusion Modelleri (Sentetik Veri)
-transformers            # Diffusion modelleri için gerekli
-accelerate              # Model yükleme ve eğitimi hızlandırma
+diffusers>=0.20.0
+transformers
+accelerate
 xformers
 
 # --- Cloud & Dataset Management ---
-gdown                   # Google Drive'dan veri indirmek için (Çok önemli)
-requests                # İnternetten dosya çekmek gerekirse
+gdown
+requests
 
 # --- Development Tools ---
-ipykernel               # VS Code içinde Jupyter Notebook çalıştırmak için
-notebook                # Klasik Jupyter Notebook arayüzü
+ipykernel
+notebook
 
-shutil                 # Dosya işlemleri için (Kopyalama, taşıma vb.)
-python-dotenv          # Ortam değişkenleri için (.env dosyaları)
+# shutil SATIRINI SILIN (Bu standart kütüphanedir, kuruluma gerek yoktur)
+python-dotenv  # Bu kalabilir
