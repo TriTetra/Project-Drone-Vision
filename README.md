@@ -1,80 +1,68 @@
-# Yolo End-to-end practice
+# Drone Vision Project
 
-Bu proje, uçtan uca **Veri Mühendisliği (Data Engineering)** ve **YOLOv8** model eğitimi süreçlerini kapsar. Veri toplama, sentetik üretim, temizleme ve özel eğitim boru hatları (pipelines) aşağıda adım adım açıklanmıştır.
+Welcome to the Drone Vision Project! This repository contains a collection of resources, experiments, and a complete end-to-end pipeline for training object detection models with YOLOv8.
 
----
+## Project Structure
 
-## Pipeline
+This repository is organized into several key modules, each serving a specific purpose in the drone vision pipeline and learning journey.
 
-### 1. Veri Kaynağı ve Sentetik Üretim
-* **Kaynak:** Roboflow ve açık kaynaklardan ham drone görüntüleri toplandı.
-> https://universe.roboflow.com/tarik-nskbt/red-2k-blue-2k-anotation-catisiz-eks9g
-* **Problem:** Veri çeşitliliği ve zemin farkları (asfalt, çim, toprak) yetersizdi.
-* **Çözüm (Sentetik Veri):** Google Colab üzerinde **Stable Diffusion XL** kullanılarak 100+ adet fotorealistik sentetik veri üretildi.
-> https://github.com/CompVis/stable-diffusio
-> https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
-  * **İlgili Script:** `data/synthetic/generate_syn_data.py`
-  * **Senaryolar:** `data/synthetic/prompts.json` içerisindeki promptlar kullanıldı.
-```bash
-python data/synthetic/generate_syn_data.py \
-  --prompts_file "data/synthetic/prompts.json" \
-  --output "data/dataset_synthetic" \
-  --count 10
+```
+.
+├── data/                    # Data handling: scripts for synthetic data generation, cleaning, and dataset preparation
+├── experiments/             # OpenCV learning hub: tutorials, code examples, and interactive scripts
+│   ├── _assets/             # Images/videos used in experiments
+│   └── ...
+├── models/                  # Model development: YOLOv8 training scripts, model weights, and related notebooks
+│   ├── notebooks/           # Notebooks for model-related experiments
+│   ├── training/            # Scripts for model training
+│   └── weights/             # Directory for trained model weights
+├── Slides/                  # Project presentations and related materials
+├── .gitignore               # Files/directories to be ignored by Git
+├── Opencv.md                # Detailed documentation for OpenCV experiments
+├── README.md                # Project overview and navigation (this file)
+├── requirements.txt         # Python dependencies
+└── YOLO.md                  # Detailed documentation for the YOLOv8 pipeline
 ```
 
-### 2. Veri Temizliği (Data Sanitization)
-İndirilen verilerdeki hatalı etiketler ve karışık dosya isimleri temizlendi.
-* **İşlem 1 (Etiket Silme):** Hatalı olan tüm `.txt` etiket dosyaları silindi.
-```bash
-python data/scripts/clean_labels.py 
-    --dir "data/raw"
-```
-* **İşlem 2 (İsimlendirme):** Tüm dosyalar `drone_v1_0001.jpg` formatına çevrildi.
-```bash
-python data/scripts/standardize_names.py 
-    --dir "data/raw" 
-    --prefix "drone"
-```
+-   **`data/`**: Contains scripts and configurations related to data engineering. This includes generating synthetic data, cleaning raw datasets, and preparing data for model training.
+-   **`experiments/`**: A comprehensive collection of OpenCV tutorials and examples, organized by topic. This module serves as a learning hub for various computer vision techniques.
+-   **`models/`**: Houses everything related to the YOLOv8 object detection model, from training scripts to pre-trained weights and evaluation notebooks.
+-   **`Slides/`**: This directory is designated for project presentations, reports, and any other related static materials. You can upload your presentations here.
+-   **`Opencv.md`**: Detailed documentation and guides for working with the OpenCV experiments.
+-   **`YOLO.md`**: In-depth documentation covering the end-to-end YOLOv8 model training pipeline.
 
-### 3. Etiketleme ve Zenginleştirme (Roboflow)
-> https://app.roboflow.com/tritetra/red-blue-squares/1
-Temizlenen **Orijinal** ve **Sentetik** veriler Roboflow'a yüklenerek toplam **1245 Görüntü** elde edildi.
-* **Preprocessing (Ön İşleme):**
-  * **Auto-Orient:** Uygulandı.
-  * **Resize:** Tüm görüntüler **512x512** piksele (Stretch) boyutlandırıldı.
-* **Augmentation (Veri Çoğaltma):** Modelin farklı açılara dayanıklı olması için her görüntüden **3 varyasyon** üretildi:
-  * **Flip:** Horizontal (Yatay Çevirme).
-  * **Rotation:** 90° Clockwise, Counter-Clockwise, Upside Down (Farklı açılardan drone bakışı simülasyonu).
-  * **Crop:** %0 ile %20 arası rastgele yakınlaştırma (Zoom).
+## Modules
 
-### 4. Lokal Veri Dağıtımı (Custom Split)
-Roboflow'un otomatik dağıtımı yerine, bilimsel tutarlılık için veriler indirilip **lokalde** işlendi.
-* **Algoritma:** Tüm veri birleştirildi, **Seed 42** ile karıştırıldı (Shuffle).
-* **Split:** %70 Train, %20 Val, %10 Test olarak ayrıldı.
-* **Konfigürasyon:** YOLO eğitimi için `data.yaml` otomatik oluşturuldu.
-```bash
-python data/scripts/prepare_dataset.py 
-    --source "data/raw_download" 
-    --dest "data/ready_dataset
-```
+This project is divided into two main parts:
 
-### 5. Model Eğitimi (Training)
-> https://docs.ultralytics.com/models/yolov8/#performance-metrics
-> https://huggingface.co/Ultralytics/YOLOv8
-> https://docs.ultralytics.com/usage/python/#export
-> https://github.com/ultralytics/ultralytics/tree/main/ultralytics/cfg/models
-Hazırlanan veri seti `.zip` olarak Google Drive'a yüklendi.
-* **Yöntem:** `train_from_drive.py` scripti veriyi Drive'dan çeker, `data.yaml` dosyasını bulur ve eğitimi başlatır.
-* **Model:** YOLOv8 Nano ve Medium.
-* **Strateji:** Overfitting'i önlemek için **300 Epoch** ve **Patience 50** (Erken Durdurma) kullanıldı.
-```bash
-    python models/training/train_from_drive.py 
-        --model m
-```
+1.  **OpenCV Experiments**: A comprehensive set of tutorials and code examples for learning and experimenting with OpenCV. This is a great place to start if you are new to computer vision or want to explore specific techniques.
+    *   [**Go to OpenCV Documentation**](./Opencv.md)
 
----
+2.  **YOLOv8 End-to-End Pipeline**: A complete, step-by-step guide and implementation for training a YOLOv8 model on a custom dataset. This includes data collection, synthetic data generation, data cleaning, labeling, and model training.
+    *   [**Go to YOLOv8 Documentation**](./YOLO.md)
 
-### Kurulum ve Çalıştırma
+## External Resources
+
+This section is for linking to external project-related materials, such as online notebooks or hosted presentations.
+
+### Presentations
+
+Project presentations and reports can be found in the [`Slides/`](./Slides) directory. Please upload your relevant presentations there.
+
+### Google NotebookLM
+
+If you have Google NotebookLM notebooks related to this project, you can list their links here. This provides easy access to your online work without needing to integrate them directly into the repository structure.
+
+*   [Your First NotebookLM Link Here](link-to-your-first-notebooklm)
+*   [Your Second NotebookLM Link Here](link-to-your-second-notebooklm)
+
+## Getting Started
+
+To get started with the project, you can explore the directories and documentation linked above.
+
+### Installation
+
+If you want to run the code, you'll need to set up a Python virtual environment and install the required packages.
 
 ```bash
 python -m venv venv
