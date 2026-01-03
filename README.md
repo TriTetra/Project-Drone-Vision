@@ -53,8 +53,10 @@ Project presentations and reports can be found in the [`Slides/`](./Slides) dire
 
 If you have Google NotebookLM notebooks related to this project, you can list their links here. This provides easy access to your online work without needing to integrate them directly into the repository structure.
 
-*   [Your First NotebookLM Link Here](link-to-your-first-notebooklm)
-*   [Your Second NotebookLM Link Here](link-to-your-second-notebooklm)
+* [Vefa Project: YOLOv8 Data Preparation Pipeline](https://notebooklm.google.com/notebook/81caf2bc-23a2-46db-bc51-2dcdaef4b95a)
+* [Python Computer Vision with OpenCV: Fundamentals and Implementation](https://notebooklm.google.com/notebook/0d00a043-a614-41a4-88ad-0784edcd0132)
+* [YOLO](https://notebooklm.google.com/notebook/574f8d45-f209-4779-bde0-aefcb76c8a6c)
+* [YOLO](https://notebooklm.google.com/notebook/574f8d45-f209-4779-bde0-aefcb76c8a6c)
 
 ## Getting Started
 
