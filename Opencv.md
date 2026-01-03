@@ -136,3 +136,14 @@ This is where all the concepts come together to build practical applications.
   - [`./experiments/6_applications_and_exercises/examples/08_hand_gesture_recognition.py`](./experiments/6_applications_and_exercises/examples/08_hand_gesture_recognition.py)
   - [`./experiments/6_applications_and_exercises/examples/09_pupil_tracking_simulation.py`](./experiments/6_applications_and_exercises/examples/09_pupil_tracking_simulation.py)
   - [`./experiments/6_applications_and_exercises/examples/10_image_comparison.py`](./experiments/6_applications_and_exercises/examples/10_image_comparison.py)
+
+---
+
+## 7. Resources
+
+Here are some of the most important and useful resources for learning and working with OpenCV.
+
+-   **[Official OpenCV Documentation](https://docs.opencv.org/4.x/)**: The primary source for all functions, modules, and APIs.
+-   **[OpenCV Tutorials](https://docs.opencv.org/4.x/d9/df8/tutorial_root.html)**: Official tutorials covering a wide range of topics from basic to advanced.
+-   **[PyImageSearch](https://pyimagesearch.com/)**: A highly popular and respected blog with countless practical, real-world OpenCV tutorials and guides.
+-   **[LearnOpenCV](https://www.learnopencv.com/)**: Another excellent blog with in-depth tutorials on computer vision and machine learning topics using OpenCV.

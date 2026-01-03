@@ -1,80 +1,80 @@
-# Yolo End-to-end practice
+# End-to-End YOLO Practice
 
-Bu proje, uçtan uca **Veri Mühendisliği (Data Engineering)** ve **YOLOv8** model eğitimi süreçlerini kapsar. Veri toplama, sentetik üretim, temizleme ve özel eğitim boru hatları (pipelines) aşağıda adım adım açıklanmıştır.
+This project covers the end-to-end processes of **Data Engineering** and **YOLOv8** model training. The data collection, synthetic generation, cleaning, and custom training pipelines are explained step-by-step below.
 
 ---
 
 ## Pipeline
 
-### 1. Veri Kaynağı ve Sentetik Üretim
-* **Kaynak:** Roboflow ve açık kaynaklardan ham drone görüntüleri toplandı.
-> https://universe.roboflow.com/tarik-nskbt/red-2k-blue-2k-anotation-catisiz-eks9g
-* **Problem:** Veri çeşitliliği ve zemin farkları (asfalt, çim, toprak) yetersizdi.
-* **Çözüm (Sentetik Veri):** Google Colab üzerinde **Stable Diffusion XL** kullanılarak 100+ adet fotorealistik sentetik veri üretildi.
-> https://github.com/CompVis/stable-diffusio
-> https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
-  * **İlgili Script:** `data/synthetic/generate_syn_data.py`
-  * **Senaryolar:** `data/synthetic/prompts.json` içerisindeki promptlar kullanıldı.
-```bash
-python data/synthetic/generate_syn_data.py \
-  --prompts_file "data/synthetic/prompts.json" \
-  --output "data/dataset_synthetic" \
-  --count 10
-```
+### 1. Data Source and Synthetic Generation
+*   **Source:** Raw drone images were collected from Roboflow and open-source repositories.
+    > https://universe.roboflow.com/tarik-nskbt/red-2k-blue-2k-anotation-catisiz-eks9g
+*   **Problem:** There was a lack of data diversity and variations in ground surfaces (asphalt, grass, dirt).
+*   **Solution (Synthetic Data):** Over 100 photorealistic synthetic data points were generated using **Stable Diffusion XL** on Google Colab.
+    > https://github.com/CompVis/stable-diffusion
+    > https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0
+    *   **Relevant Script:** `data/synthetic/generate_syn_data.py`
+    *   **Scenarios:** Prompts from `data/synthetic/prompts.json` were used.
+    ```bash
+    python data/synthetic/generate_syn_data.py \
+      --prompts_file "data/synthetic/prompts.json" \
+      --output "data/dataset_synthetic" \
+      --count 10
+    ```
 
-### 2. Veri Temizliği (Data Sanitization)
-İndirilen verilerdeki hatalı etiketler ve karışık dosya isimleri temizlendi.
-* **İşlem 1 (Etiket Silme):** Hatalı olan tüm `.txt` etiket dosyaları silindi.
-```bash
-python data/scripts/clean_labels.py 
-    --dir "data/raw"
-```
-* **İşlem 2 (İsimlendirme):** Tüm dosyalar `drone_v1_0001.jpg` formatına çevrildi.
-```bash
-python data/scripts/standardize_names.py 
-    --dir "data/raw" 
-    --prefix "drone"
-```
+### 2. Data Sanitization
+Erroneous labels and inconsistent file names in the downloaded data were cleaned.
+*   **Step 1 (Delete Labels):** All incorrect `.txt` label files were deleted.
+    ```bash
+    python data/scripts/clean_labels.py \
+        --dir "data/raw"
+    ```
+*   **Step 2 (Standardize Naming):** All files were renamed to the `drone_v1_0001.jpg` format.
+    ```bash
+    python data/scripts/standardize_names.py \
+        --dir "data/raw" \
+        --prefix "drone"
+    ```
 
-### 3. Etiketleme ve Zenginleştirme (Roboflow)
+### 3. Labeling and Enrichment (Roboflow)
 > https://app.roboflow.com/tritetra/red-blue-squares/1
-Temizlenen **Orijinal** ve **Sentetik** veriler Roboflow'a yüklenerek toplam **1245 Görüntü** elde edildi.
-* **Preprocessing (Ön İşleme):**
-  * **Auto-Orient:** Uygulandı.
-  * **Resize:** Tüm görüntüler **512x512** piksele (Stretch) boyutlandırıldı.
-* **Augmentation (Veri Çoğaltma):** Modelin farklı açılara dayanıklı olması için her görüntüden **3 varyasyon** üretildi:
-  * **Flip:** Horizontal (Yatay Çevirme).
-  * **Rotation:** 90° Clockwise, Counter-Clockwise, Upside Down (Farklı açılardan drone bakışı simülasyonu).
-  * **Crop:** %0 ile %20 arası rastgele yakınlaştırma (Zoom).
+The cleaned **Original** and **Synthetic** data were uploaded to Roboflow, resulting in a total of **1245 Images**.
+*   **Preprocessing:**
+    *   **Auto-Orient:** Applied.
+    *   **Resize:** All images were stretched to **512x512** pixels.
+*   **Augmentation:** To make the model robust to different angles, **3 variations** were generated from each image:
+    *   **Flip:** Horizontal.
+    *   **Rotation:** 90° Clockwise, Counter-Clockwise, Upside Down (to simulate different drone perspectives).
+    *   **Crop:** Random zoom between 0% and 20%.
 
-### 4. Lokal Veri Dağıtımı (Custom Split)
-Roboflow'un otomatik dağıtımı yerine, bilimsel tutarlılık için veriler indirilip **lokalde** işlendi.
-* **Algoritma:** Tüm veri birleştirildi, **Seed 42** ile karıştırıldı (Shuffle).
-* **Split:** %70 Train, %20 Val, %10 Test olarak ayrıldı.
-* **Konfigürasyon:** YOLO eğitimi için `data.yaml` otomatik oluşturuldu.
-```bash
-python data/scripts/prepare_dataset.py 
-    --source "data/raw_download" 
-    --dest "data/ready_dataset"
-```
+### 4. Local Data Split (Custom Split)
+Instead of using Roboflow's automatic distribution, the data was downloaded and processed **locally** for scientific consistency.
+*   **Algorithm:** All data was merged and shuffled with **Seed 42**.
+*   **Split:** The data was split into 70% Train, 20% Validation, and 10% Test sets.
+*   **Configuration:** A `data.yaml` file was automatically generated for YOLO training.
+    ```bash
+    python data/scripts/prepare_dataset.py \
+        --source "data/raw_download" \
+        --dest "data/ready_dataset"
+    ```
 
-### 5. Model Eğitimi (Training)
+### 5. Model Training
 > https://docs.ultralytics.com/models/yolov8/#performance-metrics
 > https://huggingface.co/Ultralytics/YOLOv8
 > https://docs.ultralytics.com/usage/python/#export
 > https://github.com/ultralytics/ultralytics/tree/main/ultralytics/cfg/models
-Hazırlanan veri seti `.zip` olarak Google Drive'a yüklendi.
-* **Yöntem:** `train_from_drive.py` scripti veriyi Drive'dan çeker, `data.yaml` dosyasını bulur ve eğitimi başlatır.
-* **Model:** YOLOv8 Nano ve Medium.
-* **Strateji:** Overfitting'i önlemek için **300 Epoch** ve **Patience 50** (Erken Durdurma) kullanıldı.
-```bash
-    python models/training/train_from_drive.py 
+The prepared dataset was uploaded to Google Drive as a `.zip` file.
+*   **Method:** The `train_from_drive.py` script pulls the data from Drive, locates the `data.yaml` file, and starts the training.
+*   **Model:** YOLOv8 Nano and Medium.
+*   **Strategy:** To prevent overfitting, **300 Epochs** and **Patience 50** (Early Stopping) were used.
+    ```bash
+    python models/training/train_from_drive.py \
         --model m
-```
+    ```
 
 ---
 
-### Kurulum ve Çalıştırma
+### Setup and Execution
 
 ```bash
 python -m venv venv
