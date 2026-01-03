@@ -48,6 +48,7 @@
 <br>
 
 **Slayt 12: Yumuşatma Metotları (Tablo)** "Gürültü gidermek için farklı yöntemlerimiz var ve hangisini seçeceğimiz amaca bağlı. Eğer çok hızlı sonuç istiyorsak 'Averaging' veya 'Gaussian' kullanırız. Ama resimde tuz-biber gibi noktacıklar varsa 'Median' en iyisidir. Hem gürültü gitsin hem kenarlar keskin kalsın diyorsak 'Bilateral' filtre kullanırız, ancak bu biraz daha yavaştır."
+
 ---
 
 ### ÖZELLİK ÇIKARIMI
@@ -69,6 +70,7 @@
 <br>
 
 **Slayt 18: Konturlar Örneği** "Burada kontur bulmanın görsel bir örneğini görüyorsunuz. Madeni paraların veya hapların sınırları ``findContours`` ile tespit edilmiş ve ``drawContours`` ile yeşil renkte çizilmiş. Ayrıca hiyerarşi özelliği sayesinde iç içe geçmiş şekilleri de ayırt edebiliriz."`
+
 ---
 
 ### VİDEO VE NESNE ANALİZİ
@@ -88,6 +90,7 @@
 <br>
 
 **Slayt 23: Video Analizi Derinlemesine Bakış** "Son olarak video analiz yöntemlerini kıyaslayalım. Hız istiyorsak Lucas-Kanade veya MOG2 tercih ederiz. Daha detaylı analiz ve tüm sahnenin hareket haritasını çıkarmak istiyorsak Farneback kullanırız. Gerçek zamanlı sistemlerde gölge yönetimi olduğu için MOG2 genellikle standart tercihimizdir."
+
 ---
 
 ### KAPANIŞ
