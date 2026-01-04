@@ -47,11 +47,9 @@ This section is for linking to external project-related materials, such as onlin
 
 ### Presentations
 
-Project presentations and reports can be found in the [`Slides/`](./Slides) directory. Please upload your relevant presentations there.
+Project presentations and reports can be found in the [`Slides/`](./Slides) directory.
 
 ### Google NotebookLM
-
-If you have Google NotebookLM notebooks related to this project, you can list their links here. This provides easy access to your online work without needing to integrate them directly into the repository structure.
 
 * [Vefa Project: YOLOv8 Data Preparation Pipeline](https://notebooklm.google.com/notebook/81caf2bc-23a2-46db-bc51-2dcdaef4b95a)
 * [Python Computer Vision with OpenCV: Fundamentals and Implementation](https://notebooklm.google.com/notebook/0d00a043-a614-41a4-88ad-0784edcd0132)
