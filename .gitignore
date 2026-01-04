@@ -1,21 +1,28 @@
-# --- GÜVENLİK (Çok Önemli) ---
-.env
-.venv
+# --- Virtual Environments ---
 venv/
+env/
+.venv/
 
-# --- PYTHON ---
+# --- Environment Variables (CRITICAL) ---
+.env
+.env.local
+
+# --- Python & System ---
 __pycache__/
 *.py[cod]
-*.so
+*$py.class
+.DS_Store
+Thumbs.db
 
-# --- VERİ SETLERİ (Data) ---
-# Scriptlerin indirdiği veya oluşturduğu klasörler
-data/dataset_local/
+# --- Data Management (Don't upload datasets) ---
+# Veri setlerini kodla indiriyoruz, repoda tutmaya gerek yok
 data/raw/
-data/processed/
-data/downloaded_dataset/
+data/raw_download/
+data/dataset_synthetic/
+data/dataset_local/
+data/ready_dataset/
 *.zip
-*.tar.gz
+Slides\speech
 
 # this is me
 # --- VİDEOLAR ---
@@ -28,12 +35,11 @@ runs/
 *.onnx
 models/weights/*
 
-# --- IDE & SİSTEM ---
+# --- IDE Settings ---
 .vscode/
 .idea/
-.DS_Store
-Thumbs.db
 *.swp
+.ipynb_checkpoints/
 
 # --- JUPYTER ---
 .ipynb_checkpoints/
