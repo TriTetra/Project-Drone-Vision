@@ -22,11 +22,11 @@ data/dataset_synthetic/
 data/dataset_local/
 data/ready_dataset/
 *.zip
-Slides\speech
+Slides/speech/
 
 # this is me
 # --- VİDEOLAR ---
-experiments\videos\output_webcam.avi 
+experiments/videos/output_webcam.avi
 
 # --- EĞİTİM ÇIKTILARI (Models) ---
 # YOLO eğitim logları ve ağırlıkları
